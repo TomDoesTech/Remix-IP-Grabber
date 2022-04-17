@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Track {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  redirectUrl String
+  trackId String @unique
+
+  clicks Click[]
+}
+
+model Click {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  userAgent String
+  ip String
+
+  Track Track @relation(fields: [trackId], references: [id])
+  trackId String
+}
